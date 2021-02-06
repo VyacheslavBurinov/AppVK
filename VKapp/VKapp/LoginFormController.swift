@@ -59,27 +59,56 @@ class LoginFormController: UIViewController {
             self.scrollView?.contentInset = contentInsets
             scrollView?.scrollIndicatorInsets = contentInsets
         }
+    
+    func checkUserData() -> Bool {
         
+      guard let login = loginInput.text,
+            let password = passwordInput.text else{
+        print("неуспешная авторизация")
+            return false
+      }
+        if login == "admin" && password == "123456" {
+                    print("успешная авторизация")
+                    return true
+                }
         
-        @objc func keyboardWillBeHidden(notification: Notification) {
+                    print("неуспешная авторизация")
+                    return false
+        
+    }
+    
+    
+        
+    @objc func keyboardWillBeHidden(notification: Notification) {
             
             let contentInsets = UIEdgeInsets.zero
             scrollView?.contentInset = contentInsets
         }
-
-    @IBAction func loginButtonPressed(_ sender: UIButton) {
+    
+    
+    func showLoginError() {
+      
+        let alert = UIAlertController(title: "Error", message: "Неверный логин или пароль.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
         
-        let login = loginInput.text!
-               
-                let password = passwordInput.text!
-                
-                
-                if login == "admin" && password == "123456" {
-                    print("успешная авторизация")
-                } else {
-                    print("неуспешная авторизация")
-                }
-
+        
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+       
+        if checkUserData() {return true}
+        showLoginError()
+        return false
+    }
+    
+    
+    
+    
+    
+        func loginButtonPressed(_ sender: UIButton) {
+        
     }
 }
 
